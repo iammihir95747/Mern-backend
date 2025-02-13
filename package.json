@@ -1,24 +1,59 @@
 {
+<<<<<<< HEAD
   "name": "back",
+=======
+<<<<<<< HEAD
+  "name": "backend",
+=======
+  "name": "back",
+>>>>>>> 16fc129 (Initial commit)
+>>>>>>> d106dc7 (save)
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
   "author": "",
   "type": "commonjs",
+<<<<<<< HEAD
   "main": "server.js",
+=======
+<<<<<<< HEAD
+  "main": "Server.js",
+=======
+  "main": "server.js",
+>>>>>>> 16fc129 (Initial commit)
+>>>>>>> d106dc7 (save)
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "dependencies": {
+<<<<<<< HEAD
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
+=======
+<<<<<<< HEAD
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+=======
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+>>>>>>> 16fc129 (Initial commit)
+>>>>>>> d106dc7 (save)
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.10.0",
+<<<<<<< HEAD
     "nodemailer": "^6.10.0",
+=======
+<<<<<<< HEAD
+=======
+    "nodemailer": "^6.10.0",
+>>>>>>> 16fc129 (Initial commit)
+>>>>>>> d106dc7 (save)
     "nodemon": "^3.1.9"
   }
 }

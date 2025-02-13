@@ -4,16 +4,31 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+<<<<<<< HEAD
+=======
+//import section
+>>>>>>> d106dc7 (save)
 
 const app = express();
 app.use(express.json());
 
+<<<<<<< HEAD
 app.use(cors({ 
   origin: "http://192.168.1.34:5173", 
   credentials: true 
 }));
 
 
+=======
+//Connection for backend Project Using Cors
+app.use(cors({ 
+    origin: "https://steady-dusk.netlify.app/", 
+    credentials: true 
+  }));
+
+
+  
+>>>>>>> d106dc7 (save)
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 const JWT_SECRET = process.env.JWT_SECRET;
