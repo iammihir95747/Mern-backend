@@ -8,11 +8,7 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
-// ✅ CORS Configuration (Allow Netlify frontend)
-app.use(cors({ 
-    origin: ["https://steady-dusk.netlify.app"], 
-    credentials: true 
-}));
+app.use(cors({ origin: "https://steady-dusk.netlify.app/", credentials: true }));
 
 const { PORT, MONGO_URI, JWT_SECRET } = process.env;
 
