@@ -4,103 +4,79 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-<<<<<<< HEAD
-=======
-//import section
->>>>>>> d106dc7 (save)
 
 const app = express();
 app.use(express.json());
 
-<<<<<<< HEAD
+// ✅ CORS Configuration (Allow Netlify frontend)
 app.use(cors({ 
-  origin: "http://192.168.1.34:5173", 
-  credentials: true 
+    origin: ["https://steady-dusk.netlify.app"], 
+    credentials: true 
 }));
 
+const { PORT, MONGO_URI, JWT_SECRET } = process.env;
 
-=======
-//Connection for backend Project Using Cors
-app.use(cors({ 
-    origin: "https://steady-dusk.netlify.app/", 
-    credentials: true 
-  }));
-
-
-  
->>>>>>> d106dc7 (save)
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI;
-const JWT_SECRET = process.env.JWT_SECRET;
-
-
-//Connection of frontent with backend 
+// ✅ Database Connection
 mongoose.connect(MONGO_URI)
-    .then(() => console.log("MongoDB Connected ✅"))
-    .catch(err => console.error("MongoDB Connection Error ❌", err));
+    .then(() => console.log("✅ MongoDB Connected"))
+    .catch(err => console.error("❌ MongoDB Connection Error", err));
 
-const userSchema = new mongoose.Schema({
+// ✅ User Model
+const User = mongoose.model('User', new mongoose.Schema({
     username: String,
     email: String,
     password: String
-});
-const User = mongoose.model('User', userSchema);
+}));
 
-
-
-
-
-// Middleware to Verify JWT Token
+// ✅ Middleware: Verify JWT Token
 const authMiddleware = (req, res, next) => {
     const token = req.header('Authorization')?.split(' ')[1];
-    if (!token) return res.status(401).json({ error: "Unauthorized ❌" });
+    if (!token) return res.status(401).json({ error: "❌ Unauthorized" });
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
+        req.user = jwt.verify(token, JWT_SECRET);
         next();
-    } catch (error) {
-        res.status(401).json({ error: "Invalid Token ❌" });
+    } catch {
+        res.status(401).json({ error: "❌ Invalid Token" });
     }
 };
 
-// User Registration Route
+// ✅ User Registration
 app.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
     try {
+        const { username, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, email, password: hashedPassword });
-        await newUser.save();
-        res.json({ message: "Registration Successful ✅" });
-    } catch (error) {
-        res.status(500).json({ error: "Registration Failed ❌" });
+        await new User({ username, email, password: hashedPassword }).save();
+        res.json({ message: "✅ Registration Successful" });
+    } catch {
+        res.status(500).json({ error: "❌ Registration Failed" });
     }
 });
 
-// User Login Route
+// ✅ User Login
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body;
     try {
+        const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(400).json({ error: "Invalid Credentials ❌" });
+            return res.status(400).json({ error: "❌ Invalid Credentials" });
         }
         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
         res.json({ token });
-    } catch (error) {
-        res.status(500).json({ error: "Login Failed ❌" });
+    } catch {
+        res.status(500).json({ error: "❌ Login Failed" });
     }
 });
 
-// User Profile Route (Protected)
+// ✅ User Profile (Protected)
 app.get('/profile', authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.user.userId).select('username email');
         res.json(user);
-    } catch (error) {
-        res.status(500).json({ error: "Profile Fetch Failed ❌" });
+    } catch {
+        res.status(500).json({ error: "❌ Profile Fetch Failed" });
     }
 });
 
-// Start Server
-app.listen(PORT, () => console.log(`Server running on port ${PORT} 🚀`));
+// ✅ Start Server
+app.listen(PORT || 5000, () => console.log(`🚀 Server running on port ${PORT || 5000}`));
