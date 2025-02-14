@@ -6,16 +6,15 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const app = express();
+const PORT = process.env.PORT || 10000;
+
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: ["https://steady-dusk.netlify.app", "http://localhost:5173"], // ✅ Allow local dev & Netlify
-    credentials: true,
-  })
-);
 
-const { PORT, MONGO_URI, JWT_SECRET } = process.env;
+app.use(cors({ origin: "https://steady-dusk.netlify.app", credentials: true }));
+
+
+const { MONGO_URI, JWT_SECRET } = process.env;
 
 // ✅ Database Connection
 mongoose
@@ -81,7 +80,7 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ error: "❌ Invalid Credentials" });
     }
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
-    
+
     // ✅ Send token in response headers
     res.header("Authorization", `Bearer ${token}`).json({ token });
   } catch (err) {
@@ -101,6 +100,6 @@ app.get("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ Start Server
-const port = PORT || 5000;
-app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
+
+
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
