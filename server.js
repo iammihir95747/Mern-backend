@@ -46,6 +46,13 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
+
+//default Routecd
+app.get("/", (req, res) => {
+  res.send("✅ Server is running!");
+});
+
+
 // ✅ User Registration
 app.post("/register", async (req, res) => {
   try {
