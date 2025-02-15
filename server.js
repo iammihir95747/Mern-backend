@@ -7,6 +7,15 @@ const bcrypt = require('bcryptjs');
 
 dotenv.config();
 
+
+app.use(cors({
+  origin: "https://steady-dusk.netlify.app", 
+  credentials: true
+}));
+
+
+
+
 const app = express();
 app.use(express.json());
 app.use(cors());
