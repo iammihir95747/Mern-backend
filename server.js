@@ -11,7 +11,7 @@ dotenv.config();
 const app = express(); // ✅ Declare `app` first
 
 app.use(cors({
-  origin: "https://steady-dusk.netlify.app", 
+  origin: "https://steadydusk.netlify.app" , 
   credentials: true
 }));
 
