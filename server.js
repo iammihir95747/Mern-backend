@@ -20,14 +20,18 @@ const UserSchema = new mongoose.Schema({
   username: String,
   email: String,
   password: String,
+  address : String,
+  phone : Number,
 });
+
+
 const User = mongoose.model("User", UserSchema);
 
 app.get("/", (req, res) => res.send("Server is running ✅"));
 
 app.get("/register", (req, res) => res.send("register is running ✅"));
 app.get("/profile", (req, res) => res.send("Profile is running ✅"));
-app.get("/login", (req, res) => res.send("Profile is running ✅"));
+app.get("/login", (req, res) => res.send("login is running ✅"));
 
 
 
@@ -66,7 +70,7 @@ app.get("/profile", async (req, res) => {
     const user = await User.findById(decoded.id);
     if (!user) return res.status(404).json({ error: "User not found" });
 
-    res.json({ username: user.username, email: user.email });
+    res.json({ username: user.username, email: user.email , address: user.address ,phone: user.phone });
   } catch {
     res.status(401).json({ error: "Invalid or expired token" });
   }
