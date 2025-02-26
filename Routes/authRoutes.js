@@ -4,23 +4,28 @@ const jwt = require("jsonwebtoken");
 const User = require("../Models/User");
 
 const router = express.Router();
-
 router.post("/register", async (req, res) => {
   try {
+    console.log("Request Body:", req.body); // ✅ Debug log
+
     const { username, email, password, address, phone } = req.body;
-    if (!username || !email || !password || !phone || !address)
+    if (!username || !email || !password || !phone || !address) {
       return res.status(400).json({ error: "All fields are required" });
+    }
 
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ error: "Email already in use" });
+    if (existingUser) {
+      return res.status(400).json({ error: "Email already in use" });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await new User({ username, email, password: hashedPassword, address, phone }).save();
+    const newUser = new User({ username, email, password: hashedPassword, address, phone });
+    await newUser.save();
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: "User registered successfully ✅" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    console.error("Registration error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
