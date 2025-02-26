@@ -15,8 +15,10 @@ mongoose
   .then(() => console.log("MONGO is connected ✅"))
   .catch(() => console.log("Failed to Connect ❌"));
 
-app.use("/", authRoutes); // Use Routes
+app.use("/", authRoutes);
 
 app.get("/", (req, res) => res.send("Server is running ✅"));
+app.use("/auth", require("./Routes/authRoutes"));
+
 
 app.listen(10000, () => console.log("Server running on port 10000 🚀"));
