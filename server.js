@@ -13,11 +13,13 @@ app.use(express.json());
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MONGO is connected ✅"))
-  .catch((err) => console.error("Failed to Connect ❌", err));
+  .catch(() => console.log("Failed to Connect ❌"));
 
-app.use("/Auth", require("./Routes/authRoutes")); 
-app.get("/auth/register" ,(req,res) => res.send("register is working ... "));
-
+app.use("/", authRoutes);
 
 app.get("/", (req, res) => res.send("Server is running ✅"));
+app.use("/auth", require("./Routes/authRoutes"));
+
+app.get("/auth/register" ,(req,res) => res.send("register is working ... "));
+
 app.listen(10000, () => console.log("Server running on port 10000 🚀"));
