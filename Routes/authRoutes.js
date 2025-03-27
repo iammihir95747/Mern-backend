@@ -7,16 +7,22 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
-    const { username, email, password, address, phone } = req.body;
+    console.log("Incoming Register Request:", req.body);
 
+    const { username, email, password, address, phone } = req.body;
     if (![username, email, password, address, phone].every(Boolean))
       return res.status(400).json({ error: "All fields are required" });
 
-    if (await User.findOne({ email }))
+    if (await User.findOne({ email })) {
+      console.log("Email already in use:", email);
       return res.status(400).json({ error: "Email already in use" });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await new User({ username, email, password: hashedPassword, address, phone }).save();
+    const newUser = new User({ username, email, password: hashedPassword, address, phone });
+
+    await newUser.save();
+    console.log("User Registered:", newUser);
 
     res.status(201).json({ message: "User registered successfully ✅" });
   } catch (error) {
@@ -24,6 +30,7 @@ router.post("/register", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 // Login Route
 router.post("/login", async (req, res) => {
