@@ -7,7 +7,9 @@ const router = express.Router();
 
 
 router.post("/register", async (req, res) => {
+  
   try {
+    console.log("Received data:", req.body); 
     const { username, email, password, address, phone } = req.body;
     
     if (![username, email, password, address, phone ].every(Boolean))
