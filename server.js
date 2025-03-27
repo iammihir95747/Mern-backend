@@ -1,25 +1,27 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const cors = require("cors");
-const authRoutes = require("./Routes/authRoutes");
+const dotenv = require("dotenv");
+const authRoutes = require("./Routes/authroutes"); 
 
 dotenv.config();
+
 const app = express();
 
-app.use(cors({ origin: "*" }));
+
 app.use(express.json());
+app.use(cors());
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => {
-    console.error("❌ MongoDB Connection Error:", err);
-    process.exit(1);
-  });
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("✅ MongoDB Connected"))
+.catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
-  app.use("/auth", require("./Routes/authRoutes"));
+// Routes
+app.use("/auth", authRoutes);
 
-app.get("/", (req, res) => res.send("Server is running ✅"));
-
-app.listen(10000, () => console.log("Server running on port 10000 🚀"));
+// Start Server
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
