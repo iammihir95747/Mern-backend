@@ -7,11 +7,12 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
   try {
-    console.log("Incoming Register Request:", req.body);
-
+   
     const { username, email, password, address, phone } = req.body;
-    if (![username, email, password, address, phone].every(Boolean))
+    if (![username, email, password, address, phone].every(Boolean)) {
+      console.error("Missing fields:", req.body);
       return res.status(400).json({ error: "All fields are required" });
+    }
 
     if (await User.findOne({ email })) {
       console.log("Email already in use:", email);
@@ -22,12 +23,12 @@ router.post("/register", async (req, res) => {
     const newUser = new User({ username, email, password: hashedPassword, address, phone });
 
     await newUser.save();
-    console.log("User Registered:", newUser);
+    console.log("User Registered Successfully:", newUser);
 
     res.status(201).json({ message: "User registered successfully ✅" });
   } catch (error) {
-    console.error("Registration Error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("🔥 Registration Error:", error);
+    res.status(500).json({ error: "Internal server error", details: error.message });
   }
 });
 

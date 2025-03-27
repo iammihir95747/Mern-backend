@@ -11,11 +11,14 @@ app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MONGO is connected ✅"))
-  .catch((err) => console.log("Failed to Connect ❌", err));
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => {
+    console.error("❌ MongoDB Connection Error:", err);
+    process.exit(1);
+  });
 
-app.use("/auth", authRoutes);
+  app.use("/auth", require("./Routes/authRoutes"));
 
 app.get("/", (req, res) => res.send("Server is running ✅"));
 
