@@ -2,24 +2,21 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const authRoutes = require("./Routes/authRoutes"); 
+const authRoutes = require("./Routes/authRoutes");
 
 dotenv.config();
-const app = express();  
+const app = express();
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MONGO is connected ✅"))
-  .catch(() => console.log("Failed to Connect ❌"));
+  .catch((err) => console.log("Failed to Connect ❌", err));
 
-app.use("/", authRoutes);
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => res.send("Server is running ✅"));
-app.use("/auth", require("./Routes/authRoutes"));
-
-app.get("/auth/register" ,(req,res) => res.send("register is working ... "));
 
 app.listen(10000, () => console.log("Server running on port 10000 🚀"));
