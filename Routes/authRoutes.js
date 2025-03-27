@@ -5,7 +5,7 @@ const User = require("../Models/User");
 
 const router = express.Router();
 
-// Register
+
 router.post("/register", async (req, res) => {
   try {
     const { username, email, password, address, phone } = req.body;
@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login
+
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   if (![email, password].every(Boolean))
