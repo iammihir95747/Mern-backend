@@ -15,8 +15,9 @@ mongoose
   .then(() => console.log("MONGO is connected ✅"))
   .catch((err) => console.error("Failed to Connect ❌", err));
 
-app.use("/auth", authRoutes);
+app.use("/Auth", require("./Routes/authRoutes")); 
+app.get("/auth/register" ,(req,res) => res.send("register is working ... "));
+
 
 app.get("/", (req, res) => res.send("Server is running ✅"));
-
 app.listen(10000, () => console.log("Server running on port 10000 🚀"));
