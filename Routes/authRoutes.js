@@ -10,16 +10,16 @@ router.post("/register", async (req, res) => {
   
   try {
     console.log("Received data:", req.body); 
-    const { username, email, password, address, phone } = req.body;
+    const { username, role , email, password, address, phone } = req.body;
     
-    if (![username, email, password, address, phone ].every(Boolean))
+    if (![username, role , email, password, address, phone ].every(Boolean))
       return res.status(400).json({ error: "All fields are required" });
 
     if (await User.findOne({ email }))
       return res.status(400).json({ error: "Email already in use" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await new User({ username, email, password: hashedPassword, address, phone }).save();
+    await new User({ username, role, email, password: hashedPassword, address, phone }).save();
 
     res.status(201).json({ message: "User registered successfully ✅" });
   } catch {
