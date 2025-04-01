@@ -5,14 +5,12 @@ const User = require("../Models/User");
 
 const router = express.Router();
 
-
 router.post("/register", async (req, res) => {
-  
   try {
-    console.log("Received data:", req.body); 
-    const { username, role , email, password, address, phone } = req.body;
-    
-    if (![username, role , email, password, address, phone ].every(Boolean))
+    console.log("Received data:", req.body);
+    const { username, role, email, password, address, phone } = req.body;
+
+    if (![username, role, email, password, address, phone].every(Boolean))
       return res.status(400).json({ error: "All fields are required" });
 
     if (await User.findOne({ email }))
@@ -27,17 +25,26 @@ router.post("/register", async (req, res) => {
   }
 });
 
-
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body;
-  if (![email, password].every(Boolean))
-    return res.status(400).json({ error: "Email and Password are required" });
+  try {
+    const { email, password } = req.body;
+    if (![email, password].every(Boolean))
+      return res.status(400).json({ error: "Email and Password are required" });
 
-  const user = await User.findOne({ email });
-  if (!user || !(await bcrypt.compare(password, user.password)))
-    return res.status(400).json({ error: "Invalid credentials" });
+    const user = await User.findOne({ email });
+    if (!user || !(await bcrypt.compare(password, user.password)))
+      return res.status(400).json({ error: "Invalid credentials" });
 
-  res.json({ token: jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" }) });
+    // ✅ Fix: Use `user.role` instead of `_role`
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    console.log("User Role:", user.role); // ✅ Debug log
+    res.json({ token, role: user.role });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 module.exports = router;
