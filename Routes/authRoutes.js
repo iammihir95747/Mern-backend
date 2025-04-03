@@ -35,13 +35,12 @@ router.post("/login", async (req, res) => {
     if (!user || !(await bcrypt.compare(password, user.password)))
       return res.status(400).json({ error: "Invalid credentials" });
 
-    // ✅ Fix: Use `user.role` instead of `_role`
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user._id, role:user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    console.log("User Role:", user.role); // ✅ Debug log
+    console.log("User Role:", user.role); 
+    
     res.json({ token, role: user.role });
-
-  } catch (error) {
+    } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
